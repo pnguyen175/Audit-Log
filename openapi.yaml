@@ -1,0 +1,88 @@
+swagger: '2.0'
+info:
+  version: '2.0'
+  title: 'Warehouse'
+  description: This is a sample Warehouse server. It will store Company information and their orders
+
+paths:
+  /get_oldest_event:
+    get:
+      summary: audits messages for company info
+      operationId: app.get_oldest_event
+      description: gets oldest company info
+      produces:
+      - application/json
+      responses:
+        200:
+          description: search results matching criteria
+          schema:
+            $ref: '#/definitions/AuditInfo'
+        400:
+          description: bad input parameter
+  /get_event:
+    get:
+      summary: audits messages for order info
+      operationId: app.get_event
+      description: gets an event based on offset
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: offset
+        description: pass a search offset for looking up an event
+        required: true
+        type: integer
+      responses:
+        200:
+          description: search results matching criteria
+          schema:
+            $ref: '#/definitions/AuditOrder'
+        400:
+          description: bad input parameter
+
+definitions:
+    AuditOrder:
+      type: object
+      required:
+      - company_name
+      - material
+      - quantity
+      - price
+      - status
+      properties:
+        company_name:
+          type: string
+          example: LBS Log Building Supplies
+        orderId:
+          type: string
+          example: A001
+        material:
+          type: string
+          example: Oak Wood
+        quantity:
+          type: integer
+          example: 100
+        price:
+          type: integer
+          example: 120
+        status:
+          type: string
+          example: Ongoing
+    AuditInfo:
+      type: object
+      required:
+      - company_name
+      - order_date
+      - order_date_complete
+      properties:
+        company_name:
+          type: string
+          example: LBS Log Building Supplies
+        order_date:
+          type: string
+          format: date-time
+          example: 2019-12-11:12:00:00
+        order_date_complete:
+          type: string
+          format: date-time
+          example: 2020-08-29:12:00:00
